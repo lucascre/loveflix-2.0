@@ -6,9 +6,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-interface MemoryPageProps {
+// ✅ ESTA É A DEFINIÇÃO DE TIPO CORRETA E ROBUSTA
+type Props = {
   params: { slug: string };
-}
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
 
 // Gera as páginas estaticamente no momento da build para melhor performance
 export async function generateStaticParams() {
@@ -17,7 +19,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function MemoryPage({ params }: MemoryPageProps) {
+export default function MemoryPage({ params }: Props) { // <- Usamos o 'Props' aqui
   const memory = memories.find(m => m.id === params.slug);
 
   if (!memory) {
