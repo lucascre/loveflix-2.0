@@ -17,6 +17,7 @@
 /.next/
 /out/
 
+
 # production
 /build
 
@@ -42,3 +43,6 @@ next-env.d.ts
 
 #pagke
 package-lock.json
+
+/public/images
+/public/videos
