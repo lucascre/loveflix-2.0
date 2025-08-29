@@ -4,5 +4,6 @@
 @tailwind utilities;
 
 body {
-  @apply bg-space-dark text-text-light;
+  /* Usando a nova cor de texto principal com alto contraste */
+  @apply bg-papiro-light text-ink-dark;
 }

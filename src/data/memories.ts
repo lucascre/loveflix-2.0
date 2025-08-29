@@ -20,6 +20,11 @@ export const memories: Memory[] = [
     date: '2025-03-04', // Assumindo a data do seu contador
     description: 'Dia do seu Aniversário, dia mais feliz para nós dois aonde começou nossa jornada.',
     coverImage: '/images/euevc_1.jpg',
+    location: {
+    name: 'Davvero Bauru',
+    lat: -22.34042424877704,          
+    lng: -49.05940921829206
+  }
   },
   {
     id: 'aniversario-tia',
@@ -28,6 +33,11 @@ export const memories: Memory[] = [
     description: 'Dia do Aniversário da minha tia, aproveitamos muito!',
     coverImage: '/images/euevc_2.webp',
     galleryImages: ['/images/euevc_2.webp'],
+    location: {
+    name: 'Quiosque Sabor Do Campo',
+    lat: -22.204791283153146,          
+    lng: -49.1227705176702
+  }
   },
   {
     id: 'passeio-incrivel',
@@ -36,6 +46,11 @@ export const memories: Memory[] = [
     description: 'Fomos jantar em casal com minha irmã nesse dia incrível.',
     coverImage: '/images/euevc_3.webp',
     galleryImages: ['/images/euevc_3.webp'],
+    location: {
+    name: 'Praça da Paz', 
+    lat: -22.337131345952866,          
+    lng: -49.05203108688184
+  }
   },
   {
     id: 'cineminha-a-dois',
@@ -44,6 +59,11 @@ export const memories: Memory[] = [
     description: 'Só eu e meu amor, naquele dia que ficou marcado no meu coração. Fomos ao cinema, rimos, nos abraçamos e vivemos momentos que eu nunca vou esquecer. Sem dúvida, o melhor dia da minha vida.',
     coverImage: '/images/euevc_2.jpg',
     galleryImages: ['/images/euevc_2.jpg'],
+    location: {
+    name: 'Cinépolis', 
+    lat: -22.31598132329178,          
+    lng: -49.06660326030202
+  }
   },
 
   // --- SEÇÃO: MOMENTOS MÁGICOS COM AS CRIANÇAS ---
@@ -77,6 +97,11 @@ export const memories: Memory[] = [
         '/images/momentos_12.jpg',
         '/images/momentos_13.jpg'
     ],
+    location: {
+    name: 'Praça Spani', 
+    lat: -22.30695153355931,        
+    lng: -49.07398565917473
+  }
   },
   {
     id: 'dia-da-pascoa',
@@ -107,6 +132,11 @@ export const memories: Memory[] = [
         '/images/momentos_23.jpg',
         '/images/momentos_24.jpg'
     ],
+    location: {
+    name: 'Cinépolis', 
+    lat: -22.31598132329178,          
+    lng: -49.06660326030202
+  }
   },
   {
     id: 'se-divertindo',
@@ -128,11 +158,30 @@ export const memories: Memory[] = [
         '/images/momentos_30.jpg',
         '/images/momentos_31.jpg'
     ],
-    // 👇 ADICIONE ESTE BLOCO DE CÓDIGO
   location: {
-    name: 'Cinépolis', // O nome que aparecerá no pop-up do mapa
-    lat: -22.31598132329178,                // O primeiro número que você copiou
-    lng: -49.06660326030202                  // O segundo número que você copiou
+    name: 'Cinépolis', 
+    lat: -22.31598132329178,          
+    lng: -49.06660326030202
   }
+  },
+  // --- NOVAS MEMÓRIAS ADICIONADAS ABAIXO ---
+  {
+    id: 'vitoria-regia',
+    title: 'Noite no Vitória Régia',
+    date: '2025-08-22',
+    description: 'Uma noite perfeita para gastar a energia das crianças. Corremos, brincamos no parquinho e fizemos um piquenique delicioso na grama. A felicidade deles é o nosso maior presente.',
+    coverImage: '/images/vitoria-regia.jpg', // Lembre-se de adicionar uma foto com este nome
+    location: {
+      name: 'Parque Vitória Régia',
+      lat: -22.3333, // Coordenadas aproximadas do parque
+      lng: -49.0805
+    }
+  },
+  {
+    id: 'noite-no-circo',
+    title: 'Noite Mágica no Circo',
+    date: '2025-08-24',
+    description: 'Os olhinhos das crianças brilhando com as luzes, as risadas com as palhaçadas e o espanto com os malabaristas. Uma noite inesquecível que nos lembrou da magia de sermos uma família.',
+    coverImage: '/images/circo-familia.jpg', // Lembre-se de adicionar uma foto com este nome
   },
 ];

@@ -39,9 +39,9 @@ export default function MemoryPage({ params }: Props) { // <- Usamos o 'Props' a
 
       <Image src={memory.coverImage} alt={memory.title} width={900} height={500} className="w-full h-auto object-cover rounded-lg shadow-lg mb-8"/>
       
-      <div className="prose prose-invert prose-lg max-w-none text-text-light font-sans leading-relaxed">
-        <p>{memory.description}</p>
-      </div>
+<div className="prose prose-lg max-w-none text-ink-light font-sans leading-relaxed">
+  <p className="text-ink-dark">{memory.description}</p>
+</div>
 
       {memory.galleryImages && memory.galleryImages.length > 0 && (
         <div className="mt-12">

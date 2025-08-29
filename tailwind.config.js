@@ -9,12 +9,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'space-dark': '#0f172a',
-        'space-blue': '#1e293b',
-        'star-gold': '#facc15',
-        'nebula-purple': '#a78bfa',
-        'text-light': '#e2e8f0',
-        'text-dark': '#94a3b8',
+        'papiro-light': '#F5EFE6',
+        'papiro-dark': '#E8DFCA',
+        'ink-dark': '#3D2B1F',
+        // 👇 ESTA É A COR CORRIGIDA - MUITO MAIS ESCURA E LEGÍVEL
+        'ink-light': '#5C524D',
+        'gold-accent': '#B8860B',
+        'rose-accent': '#C48787',
       },
       fontFamily: {
         sans: ['var(--font-quicksand)'],
@@ -22,5 +23,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
