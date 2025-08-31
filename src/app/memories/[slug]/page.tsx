@@ -1,29 +1,30 @@
 // src/app/memories/[slug]/page.tsx
-import { memories } from '@/data/memories';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Memory } from '@/data/memories';
 
-// ✅ ESTA É A DEFINIÇÃO DE TIPO CORRETA E ROBUSTA
 type Props = {
   params: { slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
-// Gera as páginas estaticamente no momento da build para melhor performance
-export async function generateStaticParams() {
-  return memories.map(memory => ({
-    slug: memory.id,
-  }));
+// Função para buscar uma memória específica
+async function getMemory(slug: string): Promise<Memory | null> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/memories/${slug}`, { cache: 'no-store' });
+  if (!res.ok) {
+    return null;
+  }
+  return res.json();
 }
 
-export default function MemoryPage({ params }: Props) { // <- Usamos o 'Props' aqui
-  const memory = memories.find(m => m.id === params.slug);
+// Removemos a função generateStaticParams para tornar a página dinâmica
+export default async function MemoryPage({ params }: Props) {
+  const memory = await getMemory(params.slug);
 
   if (!memory) {
-    notFound(); // Se não encontrar a memória, mostra página 404
+    notFound(); // Se não encontrar a memória, mostra a página 404
   }
 
   const displayDate = format(new Date(memory.date), "EEEE, d 'de' MMMM 'de' yyyy", {
@@ -39,9 +40,9 @@ export default function MemoryPage({ params }: Props) { // <- Usamos o 'Props' a
 
       <Image src={memory.coverImage} alt={memory.title} width={900} height={500} className="w-full h-auto object-cover rounded-lg shadow-lg mb-8"/>
       
-<div className="prose prose-lg max-w-none text-ink-light font-sans leading-relaxed">
-  <p className="text-ink-dark">{memory.description}</p>
-</div>
+      <div className="prose prose-lg max-w-none text-ink-light font-sans leading-relaxed">
+        <p className="text-ink-dark">{memory.description}</p>
+      </div>
 
       {memory.galleryImages && memory.galleryImages.length > 0 && (
         <div className="mt-12">

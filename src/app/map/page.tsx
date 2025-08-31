@@ -1,17 +1,24 @@
 // src/app/map/page.tsx
-"use client"; // <--- ADICIONE ESTA LINHA NO TOPO
+"use client";
 
-import { memories } from '@/data/memories';
 import dynamic from 'next/dynamic';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import type { Memory } from '@/data/memories';
 
 export default function MapPage() {
-  // Como agora estamos em um Client Component, a importação dinâmica funciona perfeitamente.
-  // O useMemo ainda é uma boa prática para evitar recarregar o componente desnecessariamente.
+  const [memories, setMemories] = useState<Memory[]>([]);
+  
+  // Busca os dados no lado do cliente
+  useEffect(() => {
+    fetch('/api/memories')
+      .then(res => res.json())
+      .then(data => setMemories(data));
+  }, []);
+
   const Map = useMemo(() => dynamic(
     () => import('@/components/MapComponent').then(mod => mod.MapComponent),
     { 
-      loading: () => <p className='text-center p-10'>Carregando mapa...</p>,
+      loading: () => <p className='text-center p-10'>A carregar mapa...</p>,
       ssr: false 
     }
   ), []);
