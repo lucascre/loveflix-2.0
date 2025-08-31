@@ -46,3 +46,4 @@ package-lock.json
 
 /public/images
 /public/videos
+/src/generated/prisma

@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import type { Memory } from '@/data/memories'; // Importe o tipo Memory
+import type { Memory } from '@prisma/client';
 
 export default function AdminDashboardPage() {
   // Estado para a lista de memórias existentes

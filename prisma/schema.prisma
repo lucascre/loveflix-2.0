@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define o nosso modelo de dados para as memórias
+model Memory {
+  id           Int      @id @default(autoincrement())
+  title        String
+  date         DateTime @db.Date
+  description  String?
+  coverImage   String?
+  locationName String?
+  lat          Float?
+  lng          Float?
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+
+  // Mapeia o modelo para a tabela "memories" na base de dados
+  @@map("memories")
+}
