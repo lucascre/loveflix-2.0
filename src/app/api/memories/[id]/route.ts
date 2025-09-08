@@ -1,81 +1,67 @@
 // src/app/api/memories/[id]/route.ts
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
-import { memories } from '@/data/memories';
-import type { Memory } from '@/data/memories';
+import { PrismaClient } from '@prisma/client';
 
-const memoriesFilePath = path.join(process.cwd(), 'src/data/memories.ts');
+const prisma = new PrismaClient();
 
-// Função para reescrever o arquivo de memórias
-async function updateMemoriesFile(newMemories: Memory[]) {
-  const fileContent = `
-// src/data/memories.ts
-export interface Memory {
-  id: string;
-  title: string;
-  date: string;
-  description: string;
-  coverImage: string;
-  galleryImages?: string[];
-  videoSrc?: string;
-  location?: { name: string; lat: number; lng: number; };
-}
-
-export const memories: Memory[] = ${JSON.stringify(newMemories, null, 2)};
-`;
-  await fs.writeFile(memoriesFilePath, fileContent.trim());
-}
-
-// GET: Obter uma única memória
+// --- GET: Obter uma única memória pelo ID ---
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const memory = memories.find((m) => m.id === params.id);
-  if (memory) {
-    return NextResponse.json(memory);
+  try {
+    const memory = await prisma.memory.findUnique({
+      where: { id: parseInt(params.id, 10) },
+    });
+    if (memory) {
+      return NextResponse.json(memory);
+    }
+    return new NextResponse('Memória não encontrada.', { status: 404 });
+  } catch (error) {
+    return new NextResponse('Erro ao buscar memória.', { status: 500 });
   }
-  return new NextResponse('Memória não encontrada.', { status: 404 });
 }
 
-// PUT: Atualizar uma memória
+// --- PUT: Atualizar uma memória ---
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const updatedData = await request.json();
-  const memoryIndex = memories.findIndex((m) => m.id === params.id);
+  try {
+    const body = await request.json();
+    const { title, date, description, coverImage, locationName, lat, lng } = body;
 
-  if (memoryIndex === -1) {
-    return new NextResponse('Memória não encontrada.', { status: 404 });
+    const updatedMemory = await prisma.memory.update({
+      where: { id: parseInt(params.id, 10) },
+      data: {
+        title,
+        date: new Date(date),
+        description,
+        coverImage,
+        locationName,
+        lat: lat ? parseFloat(lat) : null,
+        lng: lng ? parseFloat(lng) : null,
+      },
+    });
+
+    return NextResponse.json(updatedMemory);
+  } catch (error) {
+    console.error('Erro ao atualizar memória:', error);
+    return new NextResponse('Erro ao atualizar memória.', { status: 500 });
   }
-
-  // Atualiza a memória com os novos dados
-  const allMemories = [...memories];
-  allMemories[memoryIndex] = {
-    ...allMemories[memoryIndex], // Mantém dados existentes como ID e imagem
-    ...updatedData,             // Sobrescreve com os dados do formulário
-  };
-
-  await updateMemoriesFile(allMemories);
-
-  return NextResponse.json(allMemories[memoryIndex]);
 }
 
-
-// DELETE: Excluir uma memória
+// --- DELETE: Excluir uma memória ---
 export async function DELETE(
-    request: Request,
-    { params }: { params: { id: string } }
+  request: Request,
+  { params }: { params: { id: string } }
 ) {
-    const newMemories = memories.filter((m) => m.id !== params.id);
-
-    if (newMemories.length === memories.length) {
-        return new NextResponse('Memória não encontrada.', { status: 404 });
-    }
-
-    await updateMemoriesFile(newMemories);
-
+  try {
+    await prisma.memory.delete({
+      where: { id: parseInt(params.id, 10) },
+    });
     return new NextResponse('Memória excluída com sucesso.', { status: 200 });
+  } catch (error) {
+    return new NextResponse('Memória não encontrada.', { status: 404 });
+  }
 }

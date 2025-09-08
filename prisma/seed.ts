@@ -5,41 +5,42 @@ import { memories as localMemories } from '../src/data/memories';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log(`A iniciar a migração de dados...`);
+  console.log(`A iniciar o processo de seeding...`);
 
-  // Limpa a tabela para evitar duplicados se o script for corrido várias vezes
+  // 1. Limpa a tabela para evitar duplicados
   await prisma.memory.deleteMany({});
-  console.log('Tabela de memórias antiga limpa.');
+  console.log('Tabela de memórias antiga limpa com sucesso.');
 
-  // Mapeia os dados do ficheiro local para o formato esperado pela base de dados
+  // 2. Mapeia os dados do arquivo local para o formato exato do banco de dados
   const formattedMemories = localMemories.map(memory => {
-    // O 'id' original em string não é necessário, a base de dados irá gerar um numérico
-    const { id, galleryImages, videoSrc, ...restOfMemory } = memory;
-    
+    // Retorna um novo objeto contendo apenas os campos que o schema do Prisma espera
     return {
-      ...restOfMemory,
+      title: memory.title,
       date: new Date(memory.date), // Converte a string de data para um objeto Date
+      description: memory.description,
+      coverImage: memory.coverImage,
+      // Usa o operador optional chaining (?) para evitar erros se 'location' não existir
+      locationName: memory.location?.name,
       lat: memory.location?.lat,
       lng: memory.location?.lng,
-      locationName: memory.location?.name,
     };
   });
 
-  // Insere todas as memórias na base de dados de uma só vez
+  // 3. Insere todos os registros de uma só vez com os dados já formatados
   const result = await prisma.memory.createMany({
     data: formattedMemories,
     skipDuplicates: true, // Ignora se houver algum duplicado por segurança
   });
 
-  console.log(`Migração concluída com sucesso! Foram criados ${result.count} registos de memórias.`);
+  console.log(`Seeding concluído com sucesso! Foram criados ${result.count} registos de memórias.`);
 }
 
 main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error('Ocorreu um erro durante a migração:', e);
-    await prisma.$disconnect();
+  .catch((e) => {
+    console.error('Ocorreu um erro durante o seeding:', e);
     process.exit(1);
+  })
+  .finally(async () => {
+    // Fecha a conexão com o banco de dados
+    await prisma.$disconnect();
   });
