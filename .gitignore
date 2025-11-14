@@ -17,7 +17,6 @@
 /.next/
 /out/
 
-
 # production
 /build
 
@@ -41,9 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#pagke
-package-lock.json
-
-/public/images
-/public/videos
-/src/generated/prisma
+/app/generated/prisma
