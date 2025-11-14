@@ -18,13 +18,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      {/* 1. ADICIONAR O <head> AQUI */}
       <head>
-        {/* 2. Adicionar a cor do tema para a barra do telemóvel */}
+        {/* 1. Adicionar a cor do tema */}
         <meta name="theme-color" content="#e50914" />
         
-        {/* 3. Adicionar o link para o manifesto */}
+        {/* 2. Adicionar o link para o manifesto */}
         <link rel="manifest" href="/manifest.json" />
+
+        {/* 3. ESTA É A MUDANÇA: Favicon de Coração ❤️ */}
+        <link 
+          rel="icon" 
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>" 
+        />
       </head>
       
       <body className={inter.className}>
