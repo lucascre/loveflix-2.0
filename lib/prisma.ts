@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-// 1. NÃO precisamos mais importar o 'Pool'
+// 1. Não precisamos importar o 'Pool'
 import { PrismaNeon } from '@prisma/adapter-neon';
 
 // Declara um 'cachedPrisma' global para persistir no ambiente de desenvolvimento
@@ -10,10 +10,12 @@ declare global {
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === 'production') {
-  // 2. ESTA É A MUDANÇA:
-  // Em vez de criar um 'Pool', passamos a string de conexão
-  // DIRETAMENTE para o adaptador PrismaNeon.
-  const adapter = new PrismaNeon(process.env.DATABASE_URL!); 
+  // 2. ESTA É A MUDANÇA CORRIGIDA:
+  // Em vez de um 'Pool' ou uma 'string', passamos o objeto
+  // de configuração (PoolConfig) para o adaptador.
+  const adapter = new PrismaNeon({
+    connectionString: process.env.DATABASE_URL!
+  }); 
   prisma = new PrismaClient({ adapter });
 } else {
   // Configuração de desenvolvimento (para evitar múltiplas conexões)

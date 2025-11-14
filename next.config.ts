@@ -25,8 +25,13 @@ const nextConfig: NextConfig = {
 export default withPWA({
   dest: "public", // Onde o Service Worker será gerado
   register: true, // Registar automaticamente o Service Worker
-  skipWaiting: true, // Instalar novo SW imediatamente
   disable: process.env.NODE_ENV === "development", // Desativar em modo 'dev'
+  
+  // ESTA É A MUDANÇA:
+  // 'skipWaiting' deve estar dentro de 'workboxOptions'
+  workboxOptions: {
+    skipWaiting: true, // Instalar novo SW imediatamente
+  },
   
   // 3. Juntar com a sua configuração
   ...nextConfig,
