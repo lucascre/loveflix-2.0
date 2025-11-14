@@ -6,39 +6,35 @@ export function SplashScreen() {
   const [audioPlayed, setAudioPlayed] = useState(false);
 
   useEffect(() => {
-    // Toca o áudio apenas uma vez
     if (!audioPlayed) {
       try {
-        const audio = new Audio("/turun.mp3"); // Caminho do arquivo na pasta /public
-        audio.play().catch(() => {
-          // Navegadores podem bloquear o autoplay, ignora o erro
-          setIsVisible(false); // Se o áudio falhar, apenas pule o splash
-        });
+        const audio = new Audio("/turun.mp3");
+        audio.play().catch(() => setIsVisible(false));
         setAudioPlayed(true);
       } catch (e) {
-        console.error("Erro ao tocar áudio:", e);
-        setIsVisible(false); // Pula se houver erro
+        setIsVisible(false);
       }
     }
 
-    // Esconde o splash após 2.5 segundos
+    // Aumentamos o tempo para a animação CSS + áudio
     const timer = setTimeout(() => {
       setIsVisible(false);
-    }, 2500); // Duração do "turun"
+    }, 3500); // 3.5 segundos
 
     return () => clearTimeout(timer);
   }, [audioPlayed]);
 
   if (!isVisible) {
-    return null; // Não renderiza nada se não estiver visível
+    return null;
   }
 
-  // O "L" gigante (de Loveflix)
+  // Novo HTML para a animação
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-      <h1 className="text-9xl font-extrabold text-red-600 animate-pulse">
+      {/* Usamos "L" de Loveflix, mas com a classe "netflix-n" */}
+      <div className="netflix-n">
         L
-      </h1>
+      </div>
     </div>
   );
 }

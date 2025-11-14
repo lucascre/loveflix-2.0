@@ -1,12 +1,53 @@
-"use server"; // Mágico! Isso roda no servidor.
+"use server"; 
 
-import { db } from "@/lib/prisma";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { revalidatePath } from "next/cache";
+import { db } from "@/lib/prisma"; //
+import { getServerSession } from "next-auth/next"; //
+import { authOptions } from "@/lib/auth"; // <-- MUDANÇA AQUI
+import { revalidatePath } from "next/cache"; //
 
-// Ação para salvar o momento no banco de dados
-export async function saveMoment(imageUrl: string) {
+export async function saveMoment(formData: FormData) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    throw new Error("Não autenticado");
+  }
+
+  const title = formData.get("title") as string;
+  const momentDate = formData.get("momentDate") as string;
+  const imageUrl = formData.get("imageUrl") as string;
+  const fileType = formData.get("fileType") as string;
+  const categoryName = formData.get("categoryName") as string;
+
+  if (!imageUrl || !fileType || !momentDate || !categoryName || categoryName.trim() === "") {
+    throw new Error("Dados incompletos (arquivo, tipo, data e categoria são obrigatórios).");
+  }
+
+  try {
+    const category = await db.category.upsert({
+      where: { name: categoryName.trim() },
+      update: {},
+      create: { name: categoryName.trim() },
+    });
+
+    await db.moment.create({
+      data: {
+        imageUrl: imageUrl,
+        fileType: fileType,
+        title: title || "Novo Momento",
+        momentDate: new Date(momentDate),
+        userId: session.user.id,
+        categoryId: category.id,
+      },
+    });
+
+    revalidatePath("/"); 
+
+  } catch (error) {
+    console.error("Erro ao salvar momento:", error);
+    throw new Error("Falha ao salvar no banco de dados.");
+  }
+}
+
+export async function deleteMoment(momentId: string) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
@@ -14,19 +55,25 @@ export async function saveMoment(imageUrl: string) {
   }
 
   try {
-    await db.moment.create({
-      data: {
-        imageUrl: imageUrl,
-        title: "Novo Momento", // Você pode adicionar um formulário para isso
-        userId: session.user.id,
+    const moment = await db.moment.findUnique({
+      where: { id: momentId },
+    });
+
+    if (moment?.userId !== session.user.id) {
+      throw new Error("Não autorizado a apagar este momento.");
+    }
+
+    await db.moment.delete({
+      where: {
+        id: momentId,
       },
     });
 
-    // Limpa o cache da página inicial para que a nova foto apareça
     revalidatePath("/"); 
+    return { success: true };
 
   } catch (error) {
-    console.error("Erro ao salvar momento:", error);
-    throw new Error("Falha ao salvar no banco de dados.");
+    console.error("Erro ao apagar momento:", error);
+    throw new Error("Falha ao apagar do banco de dados.");
   }
 }

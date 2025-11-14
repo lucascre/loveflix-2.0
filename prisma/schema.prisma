@@ -1,25 +1,36 @@
 generator client {
   provider        = "prisma-client-js"
-  // 1. ADICIONE ESTA LINHA para habilitar a feature
-  previewFeatures = ["postgresqlExtensions"] 
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // A LINHA 'extensions' FOI REMOVIDA
 }
 
-// Modelo para as fotos/momentos
+// Modelo para as Categorias (Linhas da Netflix)
+model Category {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  moments Moment[]
+}
+
+// Modelo para as fotos/vídeos
 model Moment {
-  id        String   @id @default(cuid())
-  title     String?
-  imageUrl  String
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  title      String?
+  imageUrl   String
+  fileType   String? // "image/png" ou "video/mp4"
+  createdAt  DateTime @default(now())
+  momentDate DateTime
 
   // Relacionamento com o usuário
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relacionamento com a Categoria (opcional)
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 // --- Modelos necessários para o NextAuth.js ---
@@ -31,7 +42,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  moments       Moment[] // O usuário pode ter vários momentos
+  moments       Moment[]
 }
 
 model Account {
