@@ -41,16 +41,6 @@ export default async function HomePage() {
                          hover:scale-105 transition-transform duration-300">
               LOVEFLIX
             </h1>
-            
-            {/* Navigation (opcional - pode adicionar depois) */}
-            <nav className="hidden lg:flex items-center gap-6 text-sm">
-              <a href="#" className="text-white hover:text-gray-300 transition-colors font-medium">
-                Início
-              </a>
-              <a href="#" className="text-gray-400 hover:text-gray-300 transition-colors">
-                Minha Lista
-              </a>
-            </nav>
           </div>
 
           {/* User menu */}

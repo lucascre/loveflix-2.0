@@ -138,7 +138,7 @@ export function MomentHero({ moment, onClose, onOpenModal }: MomentHeroProps) {
                        hover:bg-gray-200 transition-all duration-300 btn-transition
                        shadow-lg hover:shadow-xl"
             >
-              <PlayCircle size={24} className="fill-current" />
+              <PlayCircle size={24} className="fill-current" /> {/* O ícone está aqui */}
               <span>Assistir</span>
             </button>
             

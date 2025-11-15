@@ -2,11 +2,11 @@
 import { useState } from "react";
 import type { Moment, Category } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { MomentUploader } from "@/components/MomentUploader";
 import { TrailerHero } from "@/components/TrailerHero";
 import { MomentHero } from "@/components/MomentHero";
-import { MomentModal } from "@/components/MomentModal";
 import { MomentCarousel } from "@/components/MomentCarousel";
 
 type CategoryWithMoments = Category & { moments: Moment[] };
@@ -24,8 +24,8 @@ export function LoveflixClientPage({
 }: LoveflixClientPageProps) {
   
   const { status } = useSession();
+  const router = useRouter();
   const [selectedMoment, setSelectedMoment] = useState<Moment | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const renderHeroSection = () => {
     if (selectedMoment) {
@@ -34,7 +34,7 @@ export function LoveflixClientPage({
           <MomentHero 
             moment={selectedMoment} 
             onClose={() => setSelectedMoment(null)}
-            onOpenModal={() => setIsModalOpen(true)}
+            onOpenModal={() => router.push(`/moment/${selectedMoment.id}`)}
           />
         </div>
       );
@@ -61,7 +61,8 @@ export function LoveflixClientPage({
   };
 
   const handleMomentClick = (moment: Moment) => {
-    setSelectedMoment(moment);
+    // Navegar diretamente para a página do momento
+    router.push(`/moment/${moment.id}`);
   };
 
   return (
@@ -96,15 +97,6 @@ export function LoveflixClientPage({
           </div>
         )}
       </section>
-
-      {isModalOpen && selectedMoment && (
-        <div className="modal-overlay">
-          <MomentModal 
-            moment={selectedMoment} 
-            onClose={() => setIsModalOpen(false)}
-          />
-        </div>
-      )}
     </div>
   );
 }
