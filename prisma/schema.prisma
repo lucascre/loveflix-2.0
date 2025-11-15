@@ -19,10 +19,13 @@ model Category {
 model Moment {
   id         String   @id @default(cuid())
   title      String?
-  imageUrl   String
-  fileType   String? // "image/png" ou "video/mp4"
+  imageUrl   String   // URL principal (capa do álbum)
+  fileType   String?  // "image/png" ou "video/mp4"
   createdAt  DateTime @default(now())
   momentDate DateTime
+  
+  // NOVO: Campo para múltiplas imagens (array de URLs)
+  albumImages String[] @default([])
 
   // Relacionamento com o usuário
   userId String

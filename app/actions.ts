@@ -1,9 +1,9 @@
 "use server"; 
 
-import { db } from "@/lib/prisma"; //
-import { getServerSession } from "next-auth/next"; //
-import { authOptions } from "@/lib/auth"; // <-- MUDANÇA AQUI
-import { revalidatePath } from "next/cache"; //
+import { db } from "@/lib/prisma";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function saveMoment(formData: FormData) {
   const session = await getServerSession(authOptions);
@@ -16,6 +16,7 @@ export async function saveMoment(formData: FormData) {
   const imageUrl = formData.get("imageUrl") as string;
   const fileType = formData.get("fileType") as string;
   const categoryName = formData.get("categoryName") as string;
+  const albumImagesJson = formData.get("albumImages") as string;
 
   if (!imageUrl || !fileType || !momentDate || !categoryName || categoryName.trim() === "") {
     throw new Error("Dados incompletos (arquivo, tipo, data e categoria são obrigatórios).");
@@ -28,6 +29,16 @@ export async function saveMoment(formData: FormData) {
       create: { name: categoryName.trim() },
     });
 
+    // Parse do array de imagens do álbum (se existir)
+    let albumImages: string[] = [];
+    if (albumImagesJson) {
+      try {
+        albumImages = JSON.parse(albumImagesJson);
+      } catch (e) {
+        console.error("Erro ao parsear albumImages:", e);
+      }
+    }
+
     await db.moment.create({
       data: {
         imageUrl: imageUrl,
@@ -36,6 +47,7 @@ export async function saveMoment(formData: FormData) {
         momentDate: new Date(momentDate),
         userId: session.user.id,
         categoryId: category.id,
+        albumImages: albumImages, // Adiciona o array de imagens
       },
     });
 

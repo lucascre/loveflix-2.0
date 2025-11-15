@@ -2,7 +2,6 @@
 import { useState } from "react";
 import type { Moment, Category } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 
 import { MomentUploader } from "@/components/MomentUploader";
 import { TrailerHero } from "@/components/TrailerHero";
@@ -10,30 +9,18 @@ import { MomentHero } from "@/components/MomentHero";
 import { MomentModal } from "@/components/MomentModal";
 import { MomentCarousel } from "@/components/MomentCarousel";
 
-// Definir o tipo para Categoria-com-Momentos
 type CategoryWithMoments = Category & { moments: Moment[] };
 
-// Props da página
 interface LoveflixClientPageProps {
   categories: CategoryWithMoments[];
   momentsWithoutCategory: Moment[];
   categoryNames: string[];
 }
 
-// Função de formatar data
-const formatDate = (date: Date) => {
-  return new Date(date).toLocaleString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
-  });
-};
-
 export function LoveflixClientPage({ 
   categories, 
   momentsWithoutCategory,
-  categoryNames // <-- 1. RECEBE OS NOMES
+  categoryNames
 }: LoveflixClientPageProps) {
   
   const { status } = useSession();
@@ -43,27 +30,34 @@ export function LoveflixClientPage({
   const renderHeroSection = () => {
     if (selectedMoment) {
       return (
-        <MomentHero 
-          moment={selectedMoment} 
-          onClose={() => setSelectedMoment(null)}
-          onOpenModal={() => setIsModalOpen(true)}
-        />
+        <div className="fade-in">
+          <MomentHero 
+            moment={selectedMoment} 
+            onClose={() => setSelectedMoment(null)}
+            onOpenModal={() => setIsModalOpen(true)}
+          />
+        </div>
       );
     }
     if (status === "loading") {
       return (
-        <div className="h-[350px] md:h-[500px] w-full max-w-4xl mx-auto rounded-lg bg-neutral-800 animate-pulse mb-12"></div>
+        <div className="h-[350px] md:h-[500px] w-full max-w-6xl mx-auto rounded-lg overflow-hidden mb-12 shimmer"></div>
       );
     }
     if (status === "authenticated") {
       return (
-        <section className="mb-12 p-4 md:p-6 bg-neutral-800 rounded-lg max-w-lg mx-auto">
-          {/* 2. PASSA OS NOMES PARA O UPLOADER */}
-          <MomentUploader categoryNames={categoryNames} /> 
+        <section className="mb-12 fade-in">
+          <div className="max-w-2xl mx-auto glass-effect rounded-xl p-6 md:p-8 netflix-glow">
+            <MomentUploader categoryNames={categoryNames} /> 
+          </div>
         </section>
       );
     }
-    return <TrailerHero />;
+    return (
+      <div className="fade-in">
+        <TrailerHero />
+      </div>
+    );
   };
 
   const handleMomentClick = (moment: Moment) => {
@@ -71,34 +65,46 @@ export function LoveflixClientPage({
   };
 
   return (
-    <>
+    <div className="min-h-screen">
       {renderHeroSection()}
 
-      <section>
-        {categories.map((category) => (
-          <MomentCarousel
+      {/* Gradiente de transição */}
+      <div className="netflix-gradient h-32 -mt-32 relative z-10"></div>
+
+      <section className="relative z-20 space-y-8 md:space-y-12">
+        {categories.map((category, index) => (
+          <div 
             key={category.id}
-            categoryName={category.name}
-            moments={category.moments}
-            onMomentClick={handleMomentClick}
-          />
+            className="slide-in-left"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <MomentCarousel
+              categoryName={category.name}
+              moments={category.moments}
+              onMomentClick={handleMomentClick}
+            />
+          </div>
         ))}
 
         {momentsWithoutCategory.length > 0 && (
-          <MomentCarousel
-            categoryName="Outros"
-            moments={momentsWithoutCategory}
-            onMomentClick={handleMomentClick}
-          />
+          <div className="slide-in-left" style={{ animationDelay: `${categories.length * 0.1}s` }}>
+            <MomentCarousel
+              categoryName="Outros"
+              moments={momentsWithoutCategory}
+              onMomentClick={handleMomentClick}
+            />
+          </div>
         )}
       </section>
 
       {isModalOpen && selectedMoment && (
-        <MomentModal 
-          moment={selectedMoment} 
-          onClose={() => setIsModalOpen(false)}
-        />
+        <div className="modal-overlay">
+          <MomentModal 
+            moment={selectedMoment} 
+            onClose={() => setIsModalOpen(false)}
+          />
+        </div>
       )}
-    </>
+    </div>
   );
 }

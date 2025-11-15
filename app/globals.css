@@ -20,15 +20,16 @@
 }
 
 body {
-  background: var(--background);
+  background: #141414;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
 }
 
+/* Animação splash screen Netflix */
 .netflix-n {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 900;
-  /* MUDANÇA AQUI: 30vw (grande no telemóvel), 15vw (menor no desktop) */
   font-size: 30vw; 
   color: #e50914;
   position: relative;
@@ -36,7 +37,8 @@ body {
   opacity: 0;
   animation: netflix-zoom-in 1.5s 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
-@media (min-width: 768px) { /* breakpoint 'md' do Tailwind */
+
+@media (min-width: 768px) {
   .netflix-n {
     font-size: 15vw;
   }
@@ -49,7 +51,7 @@ body {
   top: 0;
   bottom: 0;
   background: #fff;
-  width: 15%; /* Largura das barras de luz */
+  width: 15%;
   z-index: -1;
   opacity: 0.7;
   filter: blur(8px);
@@ -58,12 +60,12 @@ body {
 
 .netflix-n::before {
   left: 30%;
-  background: #f00; /* Vermelho */
+  background: #f00;
 }
 
 .netflix-n::after {
   left: 55%;
-  background: #00f; /* Azul */
+  background: #00f;
   animation-delay: 1.2s;
 }
 
@@ -95,4 +97,220 @@ body {
     transform: translateY(100%) scaleY(0);
     opacity: 0;
   }
+}
+
+/* Scrollbar personalizada estilo Netflix */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #141414;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Animação de fade in para elementos */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Efeito de hover nos cards estilo Netflix */
+.moment-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.moment-card:hover {
+  transform: scale(1.05) translateY(-5px);
+  z-index: 20;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.moment-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.moment-card:hover::after {
+  opacity: 1;
+}
+
+/* Animação de shimmer para loading */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #262626 0%,
+    #404040 50%,
+    #262626 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Efeito de glow vermelho Netflix */
+.netflix-glow {
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.netflix-glow:hover {
+  box-shadow: 0 0 30px rgba(229, 9, 20, 0.6);
+}
+
+/* Gradiente de fundo estilo Netflix */
+.netflix-gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 20, 20, 0) 0%,
+    rgba(20, 20, 20, 0.15) 15%,
+    rgba(20, 20, 20, 0.35) 29%,
+    rgba(20, 20, 20, 0.58) 44%,
+    #141414 68%,
+    #141414 100%
+  );
+}
+
+/* Animação de pulso para ícones */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.pulse-animation {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Efeito de vidro fosco */
+.glass-effect {
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Transição suave para botões */
+.btn-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-transition:hover {
+  transform: translateY(-2px);
+}
+
+.btn-transition:active {
+  transform: translateY(0);
+}
+
+/* Animação de entrada lateral */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+
+/* Hover effect para texto */
+.text-hover-glow:hover {
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+  transition: text-shadow 0.3s ease;
+}
+
+/* Estilo para overlay de modal */
+.modal-overlay {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Animação de scale para modal */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Brilho no hover de imagens */
+.image-hover-brightness:hover {
+  filter: brightness(1.1);
+  transition: filter 0.3s ease;
+}
+
+/* Esconder scrollbar mas manter funcionalidade */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus states mais visíveis */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #e50914;
+  outline-offset: 2px;
 }
