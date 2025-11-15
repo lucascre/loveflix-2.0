@@ -67,7 +67,7 @@ export function MomentViewer({ moment }: MomentViewerProps) {
       window.removeEventListener('touchstart', resetTimeout);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentIndex]);
+  }, [currentIndex, router]); // Adicionado 'router' à dependência
 
   const nextImage = () => {
     if (isAlbum && currentIndex < allImages.length - 1) {
@@ -264,7 +264,7 @@ export function MomentViewer({ moment }: MomentViewerProps) {
             autoPlay
             playsInline
             className="max-w-full max-h-full object-contain"
-            style={{ width: 'auto', height: 'auto' }}
+            // O ATRIBUTO 'style' FOI REMOVIDO DAQUI
           />
         ) : (
           <img

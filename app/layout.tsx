@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { SplashScreen } from "@/components/SplashScreen";
+import { Header } from "@/components/Header"; // 1. Importar Header
+import { Footer } from "@/components/Footer"; // 2. Importar Footer
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,13 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        {/* 1. Adicionar a cor do tema */}
         <meta name="theme-color" content="#e50914" />
-        
-        {/* 2. Adicionar o link para o manifesto */}
         <link rel="manifest" href="/manifest.json" />
-
-        {/* 3. ESTA É A MUDANÇA: Favicon de Coração ❤️ */}
         <link 
           rel="icon" 
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>" 
@@ -35,7 +32,15 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <SplashScreen />
-          {children}
+          <Header /> {/* 3. Adicionar Header aqui */}
+          
+          {/* 4. Mover o fundo principal para a tag <main> */}
+          <main className="min-h-screen bg-[#141414]">
+
+            {children}
+          </main>
+          
+          <Footer /> {/* 6. Adicionar Footer aqui */}
         </Providers>
       </body>
     </html>

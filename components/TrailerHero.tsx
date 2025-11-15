@@ -13,7 +13,7 @@ export function TrailerHero() {
   return (
     <div
       className={`relative flex flex-col justify-center items-center 
-                 h-[500px] md:h-[700px] w-full mx-auto overflow-hidden mb-8 md:mb-16
+                 min-h-[500px] md:min-h-[700px] w-full mx-auto overflow-hidden mb-8 md:mb-16
                  transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
     >
       {/* Background com gradiente animado */}
@@ -27,8 +27,8 @@ export function TrailerHero() {
                       blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      {/* Conteúdo */}
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      {/* Conteúdo (COM PADDING CORRIGIDO) */}
+      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto py-16">
         {/* Logo/Icon animado */}
         <div className="mb-6 md:mb-8 flex justify-center">
           <div className="relative">
@@ -43,7 +43,7 @@ export function TrailerHero() {
         </div>
 
         {/* Título principal */}
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6 
+        <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6 
                      leading-tight drop-shadow-2xl slide-in-left">
           Nossos Momentos
           <br />
@@ -51,7 +51,7 @@ export function TrailerHero() {
         </h2>
 
         {/* Subtítulo */}
-        <p className="text-lg md:text-2xl text-gray-300 mb-8 md:mb-10 max-w-2xl mx-auto 
+        <p className="text-base sm:text-xl md:text-2xl text-gray-300 mb-8 md:mb-10 max-w-2xl mx-auto 
                     leading-relaxed slide-in-left" 
            style={{ animationDelay: '0.2s' }}>
           Uma coleção especial dos nossos melhores momentos,
