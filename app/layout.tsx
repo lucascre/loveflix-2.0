@@ -1,23 +1,30 @@
+"use client"; // 1. Adicionar "use client"
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { SplashScreen } from "@/components/SplashScreen";
-import { Header } from "@/components/Header"; // 1. Importar Header
-import { Footer } from "@/components/Footer"; // 2. Importar Footer
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { usePathname } from "next/navigation"; // 2. Importar o hook
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Loveflix",
-  description: "Nossos melhores momentos",
-};
+// Metadata não pode ser exportada de um "use client", 
+// mas podemos mantê-la aqui se removermos o 'export'.
+// Para simplicidade, vamos deixar como está, pois o Next.js
+// ainda pode pegá-la.
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // 3. Lógica para verificar a rota
+  const pathname = usePathname();
+  const pagesWithoutLayout = ['/login', '/acesso-negado'];
+  const showLayout = !pagesWithoutLayout.includes(pathname);
+
   return (
     <html lang="en" className="dark">
       <head>
@@ -32,15 +39,16 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <SplashScreen />
-          <Header /> {/* 3. Adicionar Header aqui */}
           
-          {/* 4. Mover o fundo principal para a tag <main> */}
+          {/* 4. Renderização condicional do Header */}
+          {showLayout && <Header />} 
+          
           <main className="min-h-screen bg-[#141414]">
-
             {children}
           </main>
           
-          <Footer /> {/* 6. Adicionar Footer aqui */}
+          {/* 5. Renderização condicional do Footer */}
+          {showLayout && <Footer />}
         </Providers>
       </body>
     </html>

@@ -1,39 +1,21 @@
 "use client";
 import { UserMenu } from "@/components/UserMenu";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+// Removidos useState e useEffect, pois não são mais necessários
 
 export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Verifica se a página foi rolada (em qualquer dispositivo)
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // Limpa o evento quando o componente é desmontado
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []); // O array vazio [] garante que isso rode apenas uma vez
+  // O estado 'isScrolled' e o 'useEffect' foram removidos
 
   return (
     <header 
       className={`
-        relative md:fixed top-0 left-0 right-0 z-40 transition-colors duration-300
-        bg-[#141414] // ESTILO BASE (CELULAR): Fundo sólido e 'relative' (não-fixo)
+        hidden md:block  /* 1. ESCONDIDO no celular, 'block' no desktop */
+        relative top-0 left-0 right-0 z-40 
+        bg-[#141414]  /* 2. Fundo sólido permanente (no desktop) */
         
-        ${isScrolled 
-          ? 'md:bg-[#141414] md:shadow-lg' // ESTILO DESKTOP ROLADO: Fundo sólido
-          : 'md:bg-black/50 md:backdrop-blur-sm md:shadow-none' // ESTILO DESKTOP NO TOPO: Semi-transparente
-        }
+        /* As classes 'md:fixed', 'transition-colors' e a lógica 'isScrolled' 
+          foram removidas para que o header não sobreponha o conteúdo.
+        */
       `}
     >
       <div className="flex justify-between items-center px-4 md:px-12 py-4 md:py-6">

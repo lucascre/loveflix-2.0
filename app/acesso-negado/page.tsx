@@ -8,9 +8,8 @@ export default function AcessoNegadoPage() {
   const linkWhatsApp = `https://wa.me/${seuNumeroWhatsApp}?text=${encodeURIComponent(mensagemWhatsApp)}`;
 
   return (
-    // Removido h-screen e bg-black (vem do layout)
-    // Adicionado min-h para centralizar entre header/footer
-    <div className="flex flex-col items-center justify-center text-white p-8 text-center min-h-[calc(100vh-20rem)] md:pt-24">
+    // ALTERAÇÃO AQUI: Trocado 'min-h-[calc(100vh-20rem)]' por 'min-h-screen'
+    <div className="flex flex-col items-center justify-center text-white p-8 text-center min-h-screen md:pt-24">
       <Code size={64} className="text-red-600 mb-6" />
       
       <h1 className="mb-4 text-4xl font-bold text-red-600">Gostou deste site?</h1>
